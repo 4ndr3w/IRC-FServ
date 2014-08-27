@@ -1,0 +1,8 @@
+{
+        nick:"Bot",
+        host:"myirc.net",
+        port: 6697,
+        password: "password",
+        channels: ["#chat"],
+        publicIP: "127.0.0.1"
+}
