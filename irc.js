@@ -98,6 +98,11 @@ var IRC = function(options)
     this.write("PRIVMSG "+target+" :"+msg);
   };
 
+  this.notice = function(target, msg)
+  {
+    this.write("NOTICE "+target+" :"+msg);
+  };
+
   this.ctcp = function(user, msg)
   {
     var ctcpchar = new Buffer(1);
@@ -107,7 +112,7 @@ var IRC = function(options)
   };
 
   this.join = function(channel)
-  {  
+  {
     this.write("JOIN :"+channel);
   };
 

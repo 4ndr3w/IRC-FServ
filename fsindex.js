@@ -4,8 +4,33 @@ var fs = require('fs'),
     _ = require("underscore");
 
 var mounts = JSON.parse(fs.readFileSync("mounts.json"));
-
+var files = new Array();
 var tree = new Object();
+
+
+function search(terms)
+{
+  terms = terms.split(" ");
+  if ( terms.length < 2 )
+    return [];
+  var results = new Array();
+  for ( f in files )
+  {
+    var matches = 0;
+    for ( t in terms )
+    {
+      if ( files[f].name.toLowerCase().indexOf(terms[t].toLowerCase()) != -1 )
+        matches++;
+    }
+    if ( matches >= threshForMatch )
+    {
+      files[f].index = f;
+      results.push(files[f]);
+    }
+  }
+  return results;
+}
+exports.search = search;
 
 function buildFS(t, path)
 {
@@ -18,10 +43,12 @@ function buildFS(t, path)
         if ( stat.isDirectory() )
         {
             t[items[i]] = new Object();
+            files.push();
             buildFS(t[items[i]], path+"/"+items[i]);
         }
         else
         {
+          files.push({name:items[i], path:path+"/"+items[i]});
           t[items[i]] = path+"/"+items[i];
         }
       }

@@ -37,3 +37,18 @@ c.on("cmd-!new", function(channel, user, full, args)
     c.privmsg(channel, "New file: "+index.newFiles[i]);
   }
 });
+
+c.on("cmd-!search", function(channel, user, full, args)
+{
+  var results = index.search(full.substr(1));
+  if ( results > 0 )
+  {
+    c.notice(user, "Found "+results.length+" itemrs");
+    for ( r in results )
+    {
+      c.privmsg(user, "#"+results[r].index+" - "+results[r].name);
+    }
+  }
+  else
+    c.notice(user, "No results found");
+});
