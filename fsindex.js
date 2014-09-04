@@ -7,9 +7,10 @@ var mounts = JSON.parse(fs.readFileSync("mounts.json"));
 var files = new Array();
 var tree = new Object();
 
-
+var threshForMatch = 3;
 function search(terms)
 {
+  console.log("searching for "+terms);
   terms = terms.split(" ");
   if ( terms.length < 2 )
     return [];
@@ -20,14 +21,18 @@ function search(terms)
     for ( t in terms )
     {
       if ( files[f].name.toLowerCase().indexOf(terms[t].toLowerCase()) != -1 )
+      {
         matches++;
+      }
     }
     if ( matches >= threshForMatch )
     {
       files[f].index = f;
+      console.log("pushing match");
       results.push(files[f]);
     }
   }
+  console.log(results);
   return results;
 }
 exports.search = search;
@@ -43,7 +48,6 @@ function buildFS(t, path)
         if ( stat.isDirectory() )
         {
             t[items[i]] = new Object();
-            files.push();
             buildFS(t[items[i]], path+"/"+items[i]);
         }
         else
@@ -57,6 +61,7 @@ function buildFS(t, path)
 
 exports.newFiles = new Array();
 exports.tree = tree;
+exports.files = files;
 var isFirstRun = true;
 exports.refresh = function()
 {
@@ -65,14 +70,16 @@ exports.refresh = function()
   {
     delete exports.tree[t];
   }
-
+  for ( t in exports.files )
+  {
+	exports.files.pop();
+  }
   mounts = JSON.parse(fs.readFileSync("mounts.json"));
   for ( m in mounts )
   {
     tree[m] = new Object();
     buildFS(tree[m], mounts[m]);
   }
-
   exports.newFiles = new Array();
   if ( !isFirstRun )
   {

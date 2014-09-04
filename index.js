@@ -41,9 +41,10 @@ c.on("cmd-!new", function(channel, user, full, args)
 c.on("cmd-!search", function(channel, user, full, args)
 {
   var results = index.search(full.substr(1));
-  if ( results > 0 )
+  if ( results.length > 0 )
   {
-    c.notice(user, "Found "+results.length+" itemrs");
+    c.notice(user, "Found "+results.length+" items");
+    c.privmsg(user, "\"/msg "+options.nick+" DL #\" to start download");
     for ( r in results )
     {
       c.privmsg(user, "#"+results[r].index+" - "+results[r].name);
@@ -51,4 +52,20 @@ c.on("cmd-!search", function(channel, user, full, args)
   }
   else
     c.notice(user, "No results found");
+});
+
+c.on("cmd-DL", function(channel, user, full, args)
+{
+	if ( channel == options.nick )
+	{
+		try {
+			var entry = index.files[parseInt(args[1])];
+			if ( !entry )
+				c.privmsg(user, "Invalid Request");
+			else if ( c.sendFile(user, entry.path) )
+				c.privmsg(user, "Transfer started");
+			else
+				c.privmsg(user, "All slots are currently full. Try again later.");
+		} catch(e){}
+	}
 });

@@ -65,9 +65,6 @@ var IRC = function(options)
         var msg = full.slice(full.indexOf(":",1)+1, full.length);
         var args = msg.split(" ");
         var user = this.userParse(line[0]).nickname;
-        if ( line[2] == this.botnick )
-          line[2] = user;
-        console.log(line[2]);
         this.emit(line[2], user, msg, args);
         if ( line[2][0] == '#' )
           this.emit("channelmsg", line[2], user, msg, args);
@@ -128,8 +125,9 @@ var IRC = function(options)
     if ( d )
     {
       stats = fs.statSync(file);
-      return thisPtr.ctcp(user, "DCC SEND \""+path.basename(file)+"\" "+d.getIPLong()+" "+d.getPort()+" "+stats.size);
+      thisPtr.ctcp(user, "DCC SEND \""+path.basename(file)+"\" "+d.getIPLong()+" "+d.getPort()+" "+stats.size);
     }
+    return d;
   };
 
   return this;

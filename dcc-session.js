@@ -11,7 +11,7 @@ exports.setIP = function(addr)
 	myIP = ip.toLong(addr);
 };
 
-var availablePorts = [8080,8081,8082,8083,8084];
+var availablePorts = [8081,8082,8083,8084,8085];
 
 var DCC = function(file, port)
 {

@@ -1,0 +1,11 @@
+{
+  "name": "IRC-FServ",
+  "description": "IRC File Server",
+  "version": "0.0.1",
+  "dependencies": {
+    "ip": "~0.3.1",
+    "deep-diff": "~0.2.0",
+    "underscore": "~1.7.0",
+    "collections": "~1.2.1"
+  }
+}
